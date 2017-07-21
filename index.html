@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+
+<html lang="cz">
+	
+	<head>
+		<meta charset="utf-8" />
+		<title>Kalkulačka</title>
+		
+		<style>
+		#kalkulacka{
+			position:relative;
+			margin:auto;
+			float:none;
+			border-style:solid;
+			border-width:1,5px;
+			width:30%;
+			min-width:300px;
+			padding:10px;
+		}
+		table{
+			width:100%;
+			
+		}
+		td{
+			border-style:solid;
+			border-width:1px;
+			width:30%;
+			text-align:center;
+		}
+		#display{
+			text-align:left;
+			padding-left:5px;
+		}
+
+		</style>
+		
+		</head>
+		<body>
+			<div id="kalkulacka">
+				<table>
+					<div id="top"><tr><td colspan="2" id="display"></td>
+						<td>
+							<form id="input">
+							  <input id="input" type="radio" name="typ"value="standard" checked>
+							  <input id="input" type="radio" name="typ" value="unstandard">
+							</form>
+						</td>
+					<td id="del">DEL</tr></div>
+					<tr><td id="znaminko">(</td><td id="znaminko">)</td><td id="znaminko">%</td><td id="ac">AC</td></tr>
+					<tr><td id="cislo">7</td><td id="cislo">8</td><td id="cislo">9</td><td id="znaminko">/</td></tr>
+					<tr><td id="cislo">4</td><td id="cislo">5</td><td id="cislo">6</td><td id="znaminko">*</td></tr>
+					<tr><td id="cislo">1</td><td id="cislo">2</td><td id="cislo">3</td><td id="znaminko">-</td></tr>
+					<tr><td id="cislo">0</td><td id="cislo">.</td><td id="rovnase">=</td><td id="znaminko">+</td></tr>
+				</table>
+			</div>
+		</body>
+		<script>
+		
+		var text1 = "",
+			cislo,
+			typ,
+			radio = "standard";
+		
+		
+		document.getElementById("input").addEventListener("click", function(){
+			typ = document.getElementsByName("typ");
+			for (i = 0; i < typ.length; i++){
+				if (typ[i].checked){
+					radio = typ[i].value;
+					break;
+				}
+			}
+		});
+		
+		document.addEventListener('click', function(e) {
+		    //e = e || window.event;
+		    var target = e.target || e.srcElement,
+				id = target.id,
+				text = target.textContent || target.innerText || target.innerHTML;
+				console.log(id);
+			if (id =="cislo"){
+				text1 += text;
+				document.getElementById("display").innerHTML = text1;
+			}
+			else if (id == "znaminko"){
+				text1 += " " + text + " ";
+				document.getElementById("display").innerHTML = text1;
+			}
+			else {
+				switch (id){
+					case "del":
+						mazac ();
+						break;
+					case "rovnase":
+						vypocet();
+						break;
+					case "ac":
+						text1 = "";
+						document.getElementById("display").innerHTML = "";
+						break;
+					case "input":
+						text1 = "";
+						document.getElementById("display").innerHTML = "";
+						break;
+					default:
+						document.getElementById("display").innerHTML = "Neplatný vstup";
+				}
+				
+			}
+		}, false);
+		
+		
+		function mazac (){
+			
+			if (text1.slice (text1.length - 1, text1.length) == " "){
+				text1 = text1.slice(0, text1.length - 2);
+				document.getElementById("display").innerHTML = text1;
+				if (text1.length == 0){
+					document.getElementById("display").innerHTML = text1;
+				}
+			}
+			else if (text1.slice (text1.length -1, text1.length) != " "){
+				text1 = text1.slice(0, text1.length - 1);
+				document.getElementById("display").innerHTML = text1;
+				if (text1.length == 0){
+					document.getElementById("display").innerHTML = text1;
+				} 
+			}
+		}
+		
+		function vypocet (){
+			try {
+				cislo = eval(text1);
+				document.getElementById("display").innerHTML = cislo;
+				if(radio == "standard"){
+					text1 = cislo.toString();
+				}
+			}
+			catch (err){
+				document.getElementById("display").innerHTML = err.message;
+			}
+			
+		}
+		
+		</script>
+		
+</html>
